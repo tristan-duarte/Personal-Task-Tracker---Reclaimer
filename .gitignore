@@ -25,7 +25,8 @@ replay_pid*
 
 # Maven build output
 target/
-.mvn/
+.mvn/sonarlint/
+.mvn/.develocity/
 
 # IntelliJ
 .idea/
