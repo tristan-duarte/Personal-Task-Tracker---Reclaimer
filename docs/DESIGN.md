@@ -18,30 +18,30 @@ A simple personal task management application built as a learning project and a 
 
 ## Tech stack
 
-| Layer | Choice | Why |
-|-------|--------|-----|
-| Backend framework | Spring Boot 4.0 | Familiar from coursework; industry standard for Java backends |
-| Language | Java 17 | Current LTS, required by Spring Boot 4 |
-| Database | MySQL 8 | Comfortable from prior work; widely used |
-| ORM | Spring Data JPA (Hibernate) | Standard Spring Boot persistence layer |
-| Front-end | Angular | Familiar from D387; full-featured framework |
-| Build tool | Maven | Already in use; consistent with WGU coursework |
-| Deployment target | TBD (likely Render or Fly.io) | Decision deferred to Week 3 |
+| Layer             | Choice                        | Why                                                           |
+|-------------------|-------------------------------|---------------------------------------------------------------|
+| Backend framework | Spring Boot 4.0               | Familiar from coursework; industry standard for Java backends |
+| Language          | Java 17                       | Current LTS, required by Spring Boot 4                        |
+| Database          | MySQL 8                       | Comfortable from prior work; widely used                      |
+| ORM               | Spring Data JPA (Hibernate)   | Standard Spring Boot persistence layer                        |
+| Front-end         | Angular                       | Familiar from D387; full-featured framework                   |
+| Build tool        | Maven                         | Already in use; consistent with WGU coursework                |
+| Deployment target | TBD (likely Render or Fly.io) | Decision deferred to Week 3                                   |
 
 ## Domain model
 
 ### Entity: Task
 
-| Field | Type | Constraints | Notes |
-|-------|------|-------------|-------|
-| `id` | `Long` | Primary key, auto-generated | Database assigns |
-| `title` | `String` | Required, max 200 chars | The short name of the task |
-| `description` | `String` | Optional, max 2000 chars | Longer notes |
-| `status` | `TaskStatus` | Required, default `TODO` | Enum |
-| `priority` | `TaskPriority` | Required, default `MEDIUM` | Enum |
-| `dueDate` | `LocalDate` | Optional | Date only, no time |
-| `createdAt` | `LocalDateTime` | Auto-set on creation | Never modified after |
-| `updatedAt` | `LocalDateTime` | Auto-set on creation, updated on change | Tracks last edit |
+| Field         | Type            | Constraints                             | Notes                      |
+|---------------|-----------------|-----------------------------------------|----------------------------|
+| `id`          | `Long`          | Primary key, auto-generated             | Database assigns           |
+| `title`       | `String`        | Required, max 200 chars                 | The short name of the task |
+| `description` | `String`        | Optional, max 2000 chars                | Longer notes               |
+| `status`      | `TaskStatus`    | Required, default `TODO`                | Enum                       |
+| `priority`    | `TaskPriority`  | Optional, default `MEDIUM`              | Enum                       |
+| `dueDate`     | `LocalDate`     | Optional                                | Date only, no time         |
+| `createdAt`   | `LocalDateTime` | Auto-set on creation                    | Never modified after       |
+| `updatedAt`   | `LocalDateTime` | Auto-set on creation, updated on change | Tracks last edit           |
 
 ### Enums
 
@@ -52,13 +52,13 @@ A simple personal task management application built as a learning project and a 
 
 All endpoints are prefixed with `/api/tasks`. Requests and responses use JSON. Timestamps are ISO 8601 in UTC.
 
-| Method | Path | Purpose | Success | Failure |
-|--------|------|---------|---------|---------|
-| `GET` | `/api/tasks` | List all tasks | `200 OK` with array | — |
-| `GET` | `/api/tasks/{id}` | Get one task | `200 OK` with task | `404` if not found |
-| `POST` | `/api/tasks` | Create a task | `201 Created` with new task | `400` on validation error |
-| `PUT` | `/api/tasks/{id}` | Update a task (full replacement) | `200 OK` with updated task | `404` if not found, `400` on validation error |
-| `DELETE` | `/api/tasks/{id}` | Delete a task | `204 No Content` | `404` if not found |
+| Method   | Path              | Purpose                          | Success                     | Failure                                       |
+|----------|-------------------|----------------------------------|-----------------------------|-----------------------------------------------|
+| `GET`    | `/api/tasks`      | List all tasks                   | `200 OK` with array         | —                                             |
+| `GET`    | `/api/tasks/{id}` | Get one task                     | `200 OK` with task          | `404` if not found                            |
+| `POST`   | `/api/tasks`      | Create a task                    | `201 Created` with new task | `400` on validation error                     |
+| `PUT`    | `/api/tasks/{id}` | Update a task (full replacement) | `200 OK` with updated task  | `404` if not found, `400` on validation error |
+| `DELETE` | `/api/tasks/{id}` | Delete a task                    | `204 No Content`            | `404` if not found                            |
 
 ### Example: Create a task
 
@@ -97,6 +97,14 @@ Content-Type: application/json
 ### Enums for status and priority, not free-text strings
 
 Strings allow invalid values (`"Done"` vs `"DONE"` vs `"done"` vs `"DUNN"`). Enums make invalid values impossible at the type level, which is what strongly-typed systems should leverage. The API accepts and returns enum values as their string names.
+
+### Priority is optional; status is required
+
+Every task has a status (always TODO, IN_PROGRESS, or DONE — defaults to TODO).
+Priority is optional — a task with no assigned priority is meaningfully different
+from a task with LOW priority. Represented as a nullable field rather than a
+NONE enum value to keep "absence of priority" cleanly distinct from priority
+levels themselves.
 
 ### IDs in POST request bodies are ignored
 
