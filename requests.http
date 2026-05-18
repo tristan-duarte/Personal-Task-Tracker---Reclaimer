@@ -1,0 +1,34 @@
+### List all tasks
+GET http://localhost:8080/api/tasks
+
+### Create a task
+POST http://localhost:8080/api/tasks
+Content-Type: application/json
+
+{
+  "title": "Read a book",
+  "description": "At least 5 pages",
+  "priority": "MEDIUM",
+  "dueDate": "2026-05-25"
+}
+
+### Get a specific task (change the ID after you create one)
+GET http://localhost:8080/api/tasks/1
+
+### Update a task
+PUT http://localhost:8080/api/tasks/1
+Content-Type: application/json
+
+{
+  "title": "Read a book (updated)",
+  "description": "At least 10 pages now",
+  "status": "IN_PROGRESS",
+  "priority": "HIGH",
+  "dueDate": "2026-05-25"
+}
+
+### Delete a task
+DELETE http://localhost:8080/api/tasks/1
+
+### Test 404 - should return your custom error message
+GET http://localhost:8080/api/tasks/999
