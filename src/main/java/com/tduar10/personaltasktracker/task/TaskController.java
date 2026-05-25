@@ -17,8 +17,10 @@ public class TaskController {
     }
 
     @GetMapping
-    public List<Task> findAll() {
-        return taskService.findAll();
+    public List<Task> findAll(
+            @RequestParam(required = false) TaskStatus status,
+            @RequestParam(required = false) TaskPriority priority) {
+        return taskService.findAll(status, priority);
     }
 
     @GetMapping("/{id}")

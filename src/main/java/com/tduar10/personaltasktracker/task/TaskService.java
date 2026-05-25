@@ -12,7 +12,13 @@ public class TaskService {
         this.repository = repository;
     }
 
-    public List<Task> findAll() {
+    public List<Task> findAll(TaskStatus status, TaskPriority priority) {
+        if (status != null) {
+            return repository.findByStatus(status);
+        }
+        if (priority != null) {
+            return repository.findByPriority(priority);
+        }
         return repository.findAll();
     }
 

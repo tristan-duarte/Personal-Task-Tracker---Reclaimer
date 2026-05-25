@@ -29,11 +29,23 @@ class TaskServiceTest {
         when(repository.findAll()).thenReturn(List.of(t1, t2));
 
         // Act
-        List<Task> result = service.findAll();
+        List<Task> result = service.findAll(null, null);
 
         // Assert
         assertEquals(2, result.size());
         verify(repository).findAll();   // confirm the repo method was actually called
+    }
+
+    @Test
+    void findAll_shouldFilterByStatus_whenStatusProvided() {
+        Task done = new Task();
+        when(repository.findByStatus(TaskStatus.DONE)).thenReturn(List.of(done));
+
+        List<Task> result = service.findAll(TaskStatus.DONE, null);
+
+        assertEquals(1, result.size());
+        verify(repository).findByStatus(TaskStatus.DONE);
+        verify(repository, never()).findAll();
     }
 
     @Test

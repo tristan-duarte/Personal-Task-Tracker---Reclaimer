@@ -32,3 +32,12 @@ DELETE http://localhost:8080/api/tasks/1
 
 ### Test 404 - should return your custom error message
 GET http://localhost:8080/api/tasks/999
+
+### Should return all 8
+GET http://localhost:8080/api/tasks
+
+### Should return 3 (the DONE ones)
+GET http://localhost:8080/api/tasks?status=DONE
+
+### Should return 3 (the HIGH ones)
+GET http://localhost:8080/api/tasks?priority=HIGH
